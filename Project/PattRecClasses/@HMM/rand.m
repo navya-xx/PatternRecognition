@@ -30,11 +30,11 @@ end;
 %% Code LK 2016-09-15
 mc          = h.StateGen;
 S           = rand(mc,nSamples);           % generate MarkovChain states
-DataSize    = 1;                            % number of output samples per state
+DataSize    = h.DataSize();                 % number of output samples per state
 X           = zeros(DataSize,size(S,2));    % initialize X vector
 
 for ii=1:length(S)
-    X(:, ii) = rand(h.OutputDistr(S(ii)), DataSize);    % generate samples 
+    X(:, ii) = rand(h.OutputDistr(S(ii)), 1);           % generate samples 
                                                         % with respect
                                                         % to the output
                                                         % distribution of
