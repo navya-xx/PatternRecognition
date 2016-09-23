@@ -1,0 +1,120 @@
+\documentclass[twocolumn, 10pt]{IEEEtran}
+
+\usepackage{amsfonts,amsmath,amssymb,amsthm}
+\usepackage{balance}
+\usepackage{graphicx}
+\usepackage{subfig}
+
+\begin{document}
+
+\title{Pattern Recognition - Report for Assignment 1}
+\author{Navneet Agrawal, navneet@kth.se \\ Lars Kuger, kuger@kth.se}
+
+\maketitle
+
+\section{Abstract}
+
+
+\section{Background and Problem Formulation}
+\label{background}
+In order to build a pattern recognition system that is able to recognize speech, melodies or written characters, the \emph{hidden Markov model} (HMM) can be used. A HMM is defined by a set of parameters $\lambda = \{q,A,B\}$ where $q$ is a vector with the probabilities for the initial state, $A$ is the so-called transition matrix which describes the probabilities of going from state $S_{i-1}$ to state $S_{i}$ and $B$ is a vector containing the output probability density functions of each state $f_{\mathbf{X}|S_i}(\mathbf{X}=\mathbf{x}| S_i = k)$. A more detailed description of HMMs can be found in \cite{CourseBook}. The problem that will be dealt with in the course of this report is the implementation of an HMM signal source in \textsc{MATLAB} based on the provided code as well as the verification of its correct functionality.
+
+\section{Methodology}
+\label{methodology}
+The implementation of the code was guided by the instructions and the function definitions which were already given. Since HMMs can also be used in further contexts it is useful to build a toolbox containing all relevant parts of a pattern recognition system. This toolbox is and will be developed using object oriented programming in \textsc{MATLAB} to keep the code well-arranged and similar to the model. For a better understanding the code of the used classes that were already given was available. \\
+The verification of the code can be done by comparison of the values obtained from the \textsc{MATLAB} model to the theoretically expected values. In this particular case, stationary probabilities, expected values and variances will be used. In addition, hypothesis regarding the shape of output curves in a graph will be stated and compared to the plots obtained from the model. This is done to confirm that the model is working as expected.
+
+
+\section{Results}
+\label{results}
+
+\subsection{Code}
+The code of the @DiscreteD/rand, @MarkovChain/rand, and @HMM/rand is enclosed with this report as \textsc{Matlab} scripts.
+
+\subsection{Theoretical values}
+In the following, a stationary state distribution as well as the expected value of the output $E[X_t]$ and its variance $var[X_t]$ will be calculated. An HMM with the following parameters $\lambda$ is used
+\begin{eqnarray}
+q = \left( \begin{matrix} 0.75 \\ 0.25 \end{matrix}\right) \qquad 
+A = \left( \begin{matrix} 0.99 & 0.01 \\ 0.03 & 0.97 \end{matrix} \right) \qquad 
+B =  \left( \begin{matrix} b_1(x) \\ b_2(x) \end{matrix}\right)
+\end{eqnarray}
+with $b_1(x)$, $b_2(x)$ scalar Gaussian density functions with $\mu_1=0$, $\sigma_1 = 1$ and $\mu_2=3$, $\sigma_2=2$, respectively. \\
+
+According to Definition 5.2 in \cite{CourseBook}, a stationary state distribution requires that $\mathbf{p} = A^T \mathbf{p}$ holds where the elements are $p_j=P[S_t=j]$. In order to find this particular $\mathbf{p}$, the eigenvalues and, in case there is an eigenvalue equal to one, the corresponding eigenvector is needed. The eigenvalues $\theta$ can be obtained from the characteristic equation $det(A-\theta I) = \theta^2 - 1.96\theta + 0.96 \stackrel{!}{=} 0$ which gives $\theta_1 = 1$. The corresponding eigenvector $\mathbf{p}_1$ then is $\mathbf{p}_1 = (0.75 \; 0.25)^T$. It is clear that the stationary state distribution is equal to the initial state distribution $\mathbf{p}_1 = \mathbf{q}$. Therefore, it is safe to conclude that $P(S_t=j), \; j\in\{1,2\} \; \forall \; t$ is constant. \\
+
+The calculation of the expected value can be done as shown below
+\begin{eqnarray}
+	E_X[X] 	&=& E_S[E_X[X|S=i]] \label{dependencyUsed} \\
+    		&=& \sum_i E_X[X|S=i] P_S[S=i] \\
+            &=& \sum_i E_X[B_i] P_S[S=i] \\
+            &=& 0\cdot 0.75 + 3 \cdot 0.25 \\
+            &=& 0.75 \;.
+\end{eqnarray}
+Note that the random variable $B_i$ corresponds to output of the probability density function $b_i(x)$ and the dependency of $X$ on $S$ was used in eq. \eqref{dependencyUsed}.\\
+
+The same dependency will be used in the calculation of the variance as given below
+\begin{eqnarray}
+	var[X] &=& E_S[var_X[X|S]] + var_S[E_X[X|S]] \\
+    		&=& \sum_i P_S[i] \cdot ( var_X[X|i]  + \\ 
+            && + (E_X[X|i] - E_S[E_X[X|i]])^2 ) \\
+           &=& \sum_i P_S[i] \cdot ( var_X[X|i]  + \\ 
+            && + (E_X[X|i] - E_X[X])^2 ) \\
+            &=& 0.75 ( \sigma_1^2 + \mu_1 - E_X[X] ) + \\
+            && + 0.25 (\sigma_2^2 + \mu_2 - E_X[X] ) \\
+            &\approx& 3.4375 \;.
+\end{eqnarray}
+
+\subsection{Comparison to model}
+In the previous section several theoretical values were calculated. In the following these will be compared to the values that we obtain from the implemented model.\\
+
+To begin with, the stationary state distribution was calculated to be $\mathbf{p}_1 = (0.75 \; 0.25)^T$ and constant for all $t$. This can be compared to the relative frequency of the states in a sequence of $T=10000$ states. Such sequences were generated ten times as can be seen from table \ref{tab:statedistribution}. The mean value of the relative frequencies are $\hat{\mathbf{p}} = (0.7335 \; 0.2665)$ which is very similar to the value $\mathbf{p}$ that we were expecting. 
+
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.2}
+\begin{table}
+\caption{In the table the relative frequency of the states $S=1$ and $S=2$ as $\hat{p}_1$ and $\hat{p}_2$ respectively is shown for every time N that a sequence of $T=10000$ states was generated.\label{tab:statedistribution} }
+\begin{tabular}{l c c c c c c c c c c}
+ N & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\ \hline
+ $\hat{p}_1$ & 0.76 &  0.74  &  0.77  &  0.71   & 0.80   & 0.69  &  0.74 &   0.74 &   0.70 & 0.68\\
+ $\hat{p}_2$ &0.24 &   0.26 &  0.23 &   0.29 &  0.20 &  0.31 & 0.26 &    0.26 &   0.30 & 0.32 \\
+\end{tabular}
+\end{table}
+
+Furthermore, the expected value $E[X] = 0.75$ and the variance $var[x] = 3.4375$ were calculated in the previous section. These theoretical values can be compared to the mean of the expected values $\hat{\mu}_X = 0.7228$ and variances $\hat{var}[X] = 3.3693$ found from the model after generating 10 sequences of length $T=10000$ as shown in table \ref{tab:outputmeanvar}. Again, we can conclude that the theoretical values and the values obtained from the model are approximately equal.
+
+\begin{table}
+\caption{In the table the expected value $E[X]$ and the variance $var[X]$ of the output random variable $X$ is shown for every time N that a sequence of $T=10000$ output values was generated.\label{tab:outputmeanvar} }
+\begin{tabular}{l c c c c c c c c c c}
+ N & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\ \hline
+ $E[X]$ & 0.80 &   0.79  &  0.79  &  0.62 &   0.72  &  0.69  &  0.71  &  0.65  &  0.85 & 0.61\\
+ $var[X]$ & 3.50 &    3.52 &    3.69 &    3.01 &    3.37 &    3.38 &    3.38 &    3.11 &    3.66 & 3.06 \\
+\end{tabular}
+\end{table}
+
+\section{Conclusions}
+
+
+\begin{thebibliography}{1}
+
+\bibitem{CourseBook}
+Arne Leijon and Gustav Eje Henter, \emph{Pattern Recognition - Fundamental Theory and Exercise Problems}, KTH – School of Electrical Engineering, 2015
+
+
+% \bibitem{Smith}
+% Julius O. Smith, \emph{Introduction to Digital Filters with Audio Applications}, W3K Publishing, 2007
+
+
+%\bibitem{table}
+%Marc Ph. Stoecklin, \emph{Tables of common transform pairs}. (September 21, 2015). Retrieved from \emph{http://www.mechmat.ethz.ch/Lectures/tables.pdf}.
+
+%\bibitem{Mathworks}
+%Mathworks\textsuperscript{\textregistered}, \emph{Documentation: ecdf}. (September 19, 2015). Retrieved from \emph{http://se.mathworks.com/help/stats/ecdf.html}.
+
+%\bibitem{BertTsit}
+%D. P. Bertsekas,  J. N. Tsitsiklis, \emph{Introduction to Probability}, Athena Scientific, 2002.
+
+\end{thebibliography}
+
+
+
+\end{document}
