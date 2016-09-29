@@ -1,0 +1,27 @@
+%% Assignment 2.6
+%
+
+function [feature_vector] = mfcc_features(signal, frequency, winsize, ncel)
+    
+    
+    [mfcc] = ...
+        GetSpeechFeatures(signal,frequency,winsize,ncel);
+    
+    feature_vector = zeros(ncel, size(mfcc,1), 3);
+    % Normalize cepstrum values
+    mfcc_norm = zeros(size(mfcc));
+    for i = 1:size(mfcc,2)
+        m = mean(mfcc(:,i));
+        v = var(mfcc(:,i));
+        mfcc_norm(:,i) = (mfcc(:,i)-m)./sqrt(v);
+    end
+    
+    feature_vector(:,:,1) = mfcc_norm;
+    
+    % difference features
+    % delta
+    delta_mfcc = diff(mfcc_norm, 1, 2);
+    % delta-delta
+    delta_delta_mfcc = diff(mfcc,2,2);
+    
+    feature_vector(:,:,2:3) = [delta_mfcc delta_delta_mfcc];
