@@ -30,8 +30,15 @@ cepc_corr = corr(mfcc_fem_norm');
 
 % comparison of covariance matrices
 figure;
-imagesc(spec_corr)
+imagesc(t,f,spec_corr)
 colormap gray
+title('Correlation matrix of spectrogram')
+xlabel('Frequency [Hz]');
+ylabel('Frequency [Hz]');
+
 figure;
 imagesc(cepc_corr)
 colormap gray
+title('Correlation matrix of cepstrogram')
+xlabel('Coefficient #');
+ylabel('Coefficient #');
