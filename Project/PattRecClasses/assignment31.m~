@@ -1,0 +1,33 @@
+
+q = [1; 0];
+A = [0.9 0.1 0; 0 0.9 0.1];
+%A = [0.99 0.01; 0.03 0.97];
+
+mu1     = 0;
+sigma1  = 1;
+b1      = GaussD('Mean', mu1, 'StDev', sigma1);
+
+mu2     = 3;
+sigma2  = 2;
+b2      = GaussD('Mean', mu2, 'StDev', sigma2);
+
+mc = MarkovChain(q, A);
+%S  = rand(mc,200000);
+
+h  = HMM(mc, [b1 b2]);
+
+x  = [-0.2, 2.6, 1.3];
+
+pX = zeros(2,3);
+
+logS = zeros(1,2);
+
+for ii=1:length(x)
+    [pX(1,ii), logS(1)] = prob(b1,x);
+    [pX(2,ii), logS(2)] = prob(b2,x(ii));
+end
+
+% alfahat is correct, c is wrong since we used unscaled pX (but where is
+% scaled pX?)
+[alfahat, c] = forward(mc, pX);
+c = exp(c);
