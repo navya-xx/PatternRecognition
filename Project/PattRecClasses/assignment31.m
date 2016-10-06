@@ -20,4 +20,11 @@ x  = [-0.2, 2.6, 1.3];              % observed sequence
 [pX, logS] = prob([b1,b2], x);      % get state probabilities scaled by logS
 [alfahat, cScaled] = forward(mc, pX);% forward algorithm. Note that c 
                                     % values are scaled
+                                    
+betaHat = backward(mc, pX, cScaled);% run backward algorithm with scaled c
+                                    % note that results differ from
+                                    % textbook results since c is stored 
+                                    % more precise internally and the
+                                    % textbook most likely only works with
+                                    % 4 digits
 
