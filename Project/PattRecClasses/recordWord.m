@@ -6,6 +6,7 @@ nChannels = 1;
 filedir = 'audiofiles/';
 if ~exist(filedir, 'dir')
    mkdir(filedir); 
+   pause(0.1)
 end
 fileformat = '.wav';
 
@@ -13,13 +14,15 @@ fileformat = '.wav';
 filename = input('Which word do you want to record?', 's');
 if ~exist(filename,'dir')
     mkdir(filedir, filename);
+    pause(0.1)
 end
 path = strcat(filedir, filename, '/');
 
 % and separate folder for each speaker
 speakername = input('What is your name?', 's');
-if ~exist(speakername,'dir')
+if ~exist(strcat(path, speakername),'dir')
     mkdir(path, speakername);
+    pause(0.1)
 end
 path = strcat(path, speakername, '/');
 
@@ -49,7 +52,7 @@ for idx=1:numberRec
 end
 
 % play back
-for idx=1:numberRec
-    sound(myRecording(:,idx), Fs, nBits);
-    pause( ceil(size(myRecording(:,idx),1) / Fs));
-end
+%for idx=1:numberRec
+%    sound(myRecording(:,idx), Fs, nBits);
+%    pause( ceil(size(myRecording(:,idx),1) / Fs));
+%end
