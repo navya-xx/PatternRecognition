@@ -42,10 +42,11 @@ for idx=1:numberRec
     disp('End of Recording.')
 
     % Play back the recording.
-    %play(recObj);
+    play(recObj);
+    pause(2);
 
     % Store data in double-precision array.
-    myRecording = [myRecording, getaudiodata(recObj)];
+    myRecording = getaudiodata(recObj);
 
     % Number the recorded files
     audiowrite(strcat(path, filename, int2str(idx), fileformat), myRecording, Fs, 'BitsPerSample',nBits);
