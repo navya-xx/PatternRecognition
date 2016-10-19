@@ -21,10 +21,11 @@ spec_corr = corr(10*log10(spectogram_fem)');
 
 % Normalize cepstrum values
 mfcc_fem_norm = zeros(size(mfcc_fem));
-for i = 1:size(mfcc_fem,2)
-    m = mean(mfcc_fem(:,i));
-    v = var(mfcc_fem(:,i));
-    mfcc_fem_norm(:,i) = (mfcc_fem(:,i)-m)./sqrt(v);
+% normalization across time instants
+for i = 1:size(mfcc_fem,1)
+    m = mean(mfcc_fem(i,:));
+    v = var(mfcc_fem(i,:));
+    mfcc_fem_norm(i,:) = (mfcc_fem(i,:)-m)./sqrt(v);
 end
 
 cepc_corr = corr(mfcc_fem_norm');

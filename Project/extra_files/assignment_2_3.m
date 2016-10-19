@@ -27,17 +27,19 @@ ncel = 13;
 
 % Normalize cepstrum values
 mfcc_fem_norm = zeros(size(mfcc_fem));
-for i = 1:size(mfcc_fem,2)
-    m = mean(mfcc_fem(:,i));
-    v = var(mfcc_fem(:,i));
-    mfcc_fem_norm(:,i) = (mfcc_fem(:,i)-m)./sqrt(v);
+% normalization across time instants
+for i = 1:size(mfcc_fem,1)
+    m = mean(mfcc_fem(i,:));
+    v = var(mfcc_fem(i,:));
+    mfcc_fem_norm(i,:) = (mfcc_fem(i,:)-m)./sqrt(v);
 end
 
 mfcc_mel_norm = zeros(size(mfcc_mel));
-for i = 1:size(mfcc_mel,2)
-    m = mean(mfcc_mel(:,i));
-    v = var(mfcc_mel(:,i));
-    mfcc_mel_norm(:,i) = (mfcc_mel(:,i)-m)./sqrt(v);
+% normalization across time instants
+for i = 1:size(mfcc_mel,1)
+    m = mean(mfcc_mel(i,:));
+    v = var(mfcc_mel(i,:));
+    mfcc_mel_norm(i,:) = (mfcc_mel(i,:)-m)./sqrt(v);
 end
 
 % plot
@@ -91,11 +93,13 @@ ylabel('frequency cepstrum [coefficient #]')
 
 % Normalize cepstrum values
 mfcc_male_norm = zeros(size(mfcc_male));
-for i = 1:size(mfcc_male,2)
-    m = mean(mfcc_male(:,i));
-    v = var(mfcc_male(:,i));
-    mfcc_male_norm(:,i) = (mfcc_male(:,i)-m)./sqrt(v);
+% normalization across time instants
+for i = 1:size(mfcc_male,1)
+    m = mean(mfcc_male(i,:));
+    v = var(mfcc_male(i,:));
+    mfcc_male_norm(i,:) = (mfcc_male(i,:)-m)./sqrt(v);
 end
+
 
 h2 = figure(2);
 subplot(2,2,1)

@@ -13,12 +13,12 @@ function [feature_vector] = mfcc_features(signal, frequency, winsize, ncel)
         GetSpeechFeatures(signal,frequency,winsize,ncel);
     
     feature_vector = zeros(ncel*3, size(mfcc,2));
-    % Normalize cepstrum values
+    % Normalize cepstrum values in time dimension
     mfcc_norm = zeros(size(mfcc));
-    for i = 1:size(mfcc,2)
-        m = mean(mfcc(:,i));
-        v = var(mfcc(:,i));
-        mfcc_norm(:,i) = (mfcc(:,i)-m)./sqrt(v);
+    for i = 1:size(mfcc,1)
+        m = mean(mfcc(i,:));
+        v = var(mfcc(i,:));
+        mfcc_norm(i,:) = (mfcc(i,:)-m)./sqrt(v);
     end
     
     feature_vector(1:ncel,:) = mfcc_norm;
