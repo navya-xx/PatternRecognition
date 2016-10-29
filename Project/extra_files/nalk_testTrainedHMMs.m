@@ -5,7 +5,7 @@
 %load 'TrainedHMM-2WordlengthStates-002secwithoutNavneet'
 %load 'TrainedHMM-2Wordlength2States-002secwithoutNavneet' % working okay for all except for Navneet
 %load 'TrainedHMM-2Wordlength2States-recTr12-002secwithoutNavneet'
-load 'TrainedHMM-2Wordlength2States-recTr12-002secwithoutNavneetLars'% includes training for all
+load 'TrainedHMM2-2Wordlength2States-002secgirls'
 
 addpath(strcat(pwd,audiodir));             % Add audiofiles to path
 addpath(strcat(pwd,'/../PattRecClasses'));      % Add classes to path
