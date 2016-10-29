@@ -36,5 +36,26 @@ for i=1:numel(hmm)%for all HMM objects
     %
     %logP(i)= result for hmm(i)
     %continue coding from here, and delete the error message.
-    error('Not yet implemented');
+    %error('Not yet implemented');
+    
+    % implementation by Navneet and Lars
+%     [pX, logS] = prob(hmm(i).OutputDistr, x);% get state probabilities scaled by logS
+%     [~, cScaled] = forward(hmm(i).StateGen, pX);% forward algorithm. Note that c 
+%                                     % values are scaled
+%     
+%     if logS                                    
+%         c = cScaled(1:length(logS)).*exp(logS);
+%     else
+%         c = cScaled;
+%     end
+%                                     
+%     logP(i) = sum(log(c));
+    mc=hmm(i).StateGen;
+    b=hmm(i).OutputDistr;
+    pX=exp(logprob(b,x));
+    [~,c]=forward(mc,pX);
+    logP(i)= sum(log(c),2);
+
+
+
 end;
