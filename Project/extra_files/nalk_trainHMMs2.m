@@ -9,7 +9,7 @@ disp('Start initializing...');
 showPlots       = 0;
 
 recPerWord      = 15;
-recForTraining  = 10;
+recForTraining  = 12;
 recForCheck     = recPerWord - recForTraining;
 
 nStates         = 0;
@@ -17,13 +17,13 @@ filetype        = '.wav';
 audiodir        = '/audiofiles';
 
 winsize         = 0.02; % 0.02 seems to work better than 0.01 or 0.03
-nceps           = 13; % use delta and delta-delta to improve performance
+nceps           = 10; % use delta and delta-delta to improve performance
 
 Fs      = 22050;
 nBits   = 16;
 nChannels = 1;
 
-pd      = GaussD();
+pd      = GaussMixD(2);
 
 disp('Successfully initialized.');
 %%
@@ -54,9 +54,9 @@ for idx=1+offset:nrWords+offset                   % loop through words
         
             speaker = speakerlist(speakeridx).name;
             
-            if ~strcmp(speaker,'Navneet')
-                continue;
-            end
+            %if strcmp(speaker,'Madolyn') || strcmp(speaker,'Navneet')
+                %continue;
+            %end
 
 
             tmpfile = strcat(pwd, audiodir, '/', word, '/',...
@@ -83,6 +83,6 @@ for idx=1+offset:nrWords+offset                   % loop through words
 end
 
 
-save 'NavneetProfile' HMMS HMMSWords Fs fs nChannels nBits winsize nceps recPerWord recForCheck obsData lData pd
+save 'GeneralProfileGaussMixD' HMMS HMMSWords Fs fs nChannels nBits winsize nceps recPerWord recForCheck obsData lData pd
 disp('Saved trained HMM.');
 
