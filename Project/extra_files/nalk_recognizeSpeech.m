@@ -48,21 +48,18 @@ while(1)
     for ii=3:length(profilelist)
        fprintf('\t%d) %s\n', ii-2, profilelist(ii).name);
     end
-    fprintf('\t%d) %s\n', ii-1, 'Female (Caroline & Madolyn)');
-    fprintf('\t%d) %s\n', ii, 'German (Caroline & Lars)');
-    fprintf('\t%d) %s\n', ii+1, 'General (All)');
-    fprintf('\t%d) %s\n', ii+2, 'General GaussMixD');
+    fprintf('\t%d) %s\n', ii-1, 'General (All)');
+    fprintf('\t%d) %s\n', ii, 'General GaussMixD(2)');
+    fprintf('\t%d) %s\n', ii+1, 'General GaussMixD(3)');
     
     profile = str2num(input('Please enter a number: ', 's'));
     
     if profile==ii-1
-        profileName = 'Female';
-    elseif profile==ii
-        profileName = 'German';
-    elseif profile==ii+1
         profileName = 'General';
-    elseif profile==ii+2
+    elseif profile==ii
         profileName = 'GeneralGaussMix2';
+    elseif profile==ii+1
+        profileName = 'GeneralGaussMix3';
     else
         profileName = profilelist(profile+2).name;
     end
@@ -77,14 +74,12 @@ while(1)
             load 'MadolynProfile';
         case 'Navneet'
             load 'NavneetProfile';
-        case 'Female'
-            load 'FemaleProfile';
-        case 'German'
-            load 'GermanProfile';
         case 'General'
             load 'GeneralProfile';
         case 'GeneralGaussMix2'
             load 'GeneralProfileGaussMixD';
+        case 'GeneralGaussMix3'
+            load 'GeneralProfileGaussMixD3';
         %case 'New'
             % TODO
         otherwise

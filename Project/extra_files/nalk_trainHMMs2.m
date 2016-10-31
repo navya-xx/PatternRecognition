@@ -9,7 +9,8 @@ disp('Start initializing...');
 showPlots       = 1;
 
 recPerWord      = 15;
-recForTraining  = 3;
+recForTraining  = 10;   % Actual number of recordings used for training is
+                        % recForTraining-1 !
 recForCheck     = recPerWord - recForTraining;
 
 nStates         = 0;
@@ -23,7 +24,7 @@ Fs      = 22050;
 nBits   = 16;
 nChannels = 1;
 
-pd      = GaussMixD(2);
+pd      = GaussMixD(3);
 
 disp('Successfully initialized.');
 %%
@@ -49,13 +50,13 @@ for idx=1+offset:nrWords+offset                   % loop through words
     obsData    = [];    % feature vector
     lData   = [];   % length of single recordings
     
-    for recidx=2:recForTraining+1             % loop through recordings
+    for recidx=2:recForTraining             % loop through recordings
         for speakeridx=1+offset:nrSpeakers+offset    % loop through speakers
         
             speaker = speakerlist(speakeridx).name;
             
-            %if strcmp(speaker,'Madolyn') || strcmp(speaker,'Navneet')
-                %continue;
+            %if ~strcmp(speaker,'Madolyn')
+            %    continue;
             %end
 
 
@@ -67,12 +68,6 @@ for idx=1+offset:nrWords+offset                   % loop through words
             obsData     = [ obsData, featureVec];
             lData       = [ lData, length(featureVec)];
             
-            if showPlots && recidx==2
-                % plots cepstral coefficients for 4 recordings of each word 
-                % for every speaker so be careful 
-                % (produces nrSpeakers*nrWords figures)
-                plotCepsCoef(obsData, lData, word, speaker);
-            end
         end
         
 
@@ -85,6 +80,6 @@ for idx=1+offset:nrWords+offset                   % loop through words
 end
 
 
-save 'TestProfile' HMMS HMMSWords Fs fs nChannels nBits winsize nceps recPerWord recForCheck obsData lData pd
+save 'GeneralProfileGaussMixD3' HMMS HMMSWords Fs fs nChannels nBits winsize nceps recPerWord recForCheck obsData lData pd
 disp('Saved trained HMM.');
 

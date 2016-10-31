@@ -6,10 +6,10 @@ clear all
 
 disp('Start initializing...');
 
-showPlots       = 0;
+showPlots       = 1;
 
 recPerWord      = 15;
-recForTraining  = 12;
+recForTraining  = 4;
 recForCheck     = recPerWord - recForTraining;
 
 nStates         = 0;
@@ -81,6 +81,6 @@ for idx=1+offset:nrWords+offset                   % loop through words
 end
 
 
-save 'TrainedHMM-2Wordlength2States-recTr12-002secwithoutNavneetLars' HMMS HMMSWords Fs fs nChannels nBits winsize nceps recPerWord recForCheck
+save 'Test' HMMS HMMSWords Fs fs nChannels nBits winsize nceps recPerWord recForCheck
 disp('Saved trained HMM.');
 
