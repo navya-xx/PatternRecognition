@@ -22,8 +22,13 @@ nceps           = 13; % use delta and delta-delta to improve performance
 Fs      = 22050;
 nBits   = 16;
 nChannels = 1;
+nMix    = 3;
+Gd      = [];
+for j = 1:nMix
+    Gd = [Gd GaussD];
+end
 
-pd      = GaussD();
+pd      = GaussMixD(Gd, randn(1,nMix));
 
 disp('Successfully initialized.');
 %%
@@ -49,9 +54,9 @@ for idx=1+offset:nrWords+offset                   % loop through words
         
         speaker = speakerlist(speakeridx).name;
         
-        if ~strcmp(speaker, 'Lars')
-            continue
-        end
+        %if strcmp(speaker, 'Navneet') && strcmp(speaker,'Lars')
+        %    continue
+        %end
         
         obsData    = [];    % feature vector
         lData   = [];   % length of single recordings
@@ -77,10 +82,10 @@ for idx=1+offset:nrWords+offset                   % loop through words
     nStates = 2*length(word)+2;
     HMMS = [HMMS, MakeLeftRightHMM(nStates, pd, obsData, lData)];
     HMMSWords = [HMMSWords; {word}];
-    disp(strcat('Trained left right HMM #',int2str(idx-2), ' for word ', word));
+    disp(strcat('Trained left right HMM #',int2str(idx-2), ' for word : ', word));
 end
 
 
-save 'TrainedHMM-2Wordlength2States-recTr12-002sec_lars' HMMS HMMSWords Fs fs nChannels nBits winsize nceps recPerWord recForCheck
+save 'TrainedHMM-GMM-2Wordlength2States-recTr12-002sec-ALL' HMMS HMMSWords Fs fs nChannels nBits winsize nceps recPerWord recForCheck
 disp('Saved trained HMM.');
 
