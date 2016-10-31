@@ -6,10 +6,10 @@ clear all
 
 disp('Start initializing...');
 
-showPlots       = 0;
+showPlots       = 1;
 
 recPerWord      = 15;
-recForTraining  = 12;
+recForTraining  = 3;
 recForCheck     = recPerWord - recForTraining;
 
 nStates         = 0;
@@ -66,14 +66,16 @@ for idx=1+offset:nrWords+offset                   % loop through words
             featureVec  = mfcc_features(rec,fs,winsize, nceps);
             obsData     = [ obsData, featureVec];
             lData       = [ lData, length(featureVec)];
+            
+            if showPlots && recidx==2
+                % plots cepstral coefficients for 4 recordings of each word 
+                % for every speaker so be careful 
+                % (produces nrSpeakers*nrWords figures)
+                plotCepsCoef(obsData, lData, word, speaker);
+            end
         end
         
-        if showPlots
-            % plots cepstral coefficients for 4 recordings of each word 
-            % for every speaker so be careful 
-            % (produces nrSpeakers*nrWords figures)
-            plotCepsCoef(obsData, lData, word, speaker);
-        end
+
     end
     
     nStates = 2*length(word)+2;
@@ -83,6 +85,6 @@ for idx=1+offset:nrWords+offset                   % loop through words
 end
 
 
-save 'GeneralProfileGaussMixD' HMMS HMMSWords Fs fs nChannels nBits winsize nceps recPerWord recForCheck obsData lData pd
+save 'TestProfile' HMMS HMMSWords Fs fs nChannels nBits winsize nceps recPerWord recForCheck obsData lData pd
 disp('Saved trained HMM.');
 

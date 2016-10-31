@@ -38,7 +38,7 @@ myRecording = [];
 for idx=1:numberRec
 
     disp('Start speaking.')
-    recordblocking(recObj, 2);
+    recordblocking(recObj, 5);
     disp('End of Recording.')
 
     % Play back the recording.
