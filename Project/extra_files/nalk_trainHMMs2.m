@@ -80,6 +80,6 @@ for idx=1+offset:nrWords+offset                   % loop through words
 end
 
 
-save 'GeneralProfileGaussMixD3' HMMS HMMSWords Fs fs nChannels nBits winsize nceps recPerWord recForCheck obsData lData pd
+save 'Test' HMMS HMMSWords Fs fs nChannels nBits winsize nceps recPerWord recForCheck obsData lData pd
 disp('Saved trained HMM.');
 

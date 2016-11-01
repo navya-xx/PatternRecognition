@@ -7,6 +7,14 @@
 % Fall Term 2016, Pattern Recognition course
 % Authors: Navneet Agrawal and Lars Kuger
 
+% Quick facts:
+% nStates = 2*wordlength + 2
+% nceps = 10
+% nTrainingRec = 9
+% nCheckRec = 5
+% Single Person: GaussD
+% More persons: GaussMixD 2 and 3
+
 
 audiodir=0;
 init    =0;
@@ -65,6 +73,7 @@ while(1)
     end
     
     % load the corresponding trained HMMs for the words
+    % profiles used 9 recordings for training
     switch profileName
         case 'Caroline'
             load 'CarolineProfile';
@@ -89,7 +98,11 @@ while(1)
     fprintf('Profile %s loaded\n', profileName);
     
     % let user choose which application she wants to run
-    fprintf('\nDo you want to record a word (1), cross check against unused recordings (2) or start calendar app (3)?\n');
+    fprintf('\nWhat would you like to do?\n')
+    fprintf('\t1) record a word\n');
+    fprintf('\t2) cross check against unused recordings\n');
+    fprintf('\t3) start calendar app\n');
+    fprintf('\t4) plot HMM/rand generated data\n');
     action = str2num(input('Please enter a number: ', 's'));
     
     
@@ -169,6 +182,10 @@ while(1)
             xlabel('Recognized Word #');
             ylabel('Correct Word #');
         end
+        
+        % output error probability
+        nalk_errorprobability(recognizedWords, speakerlist);
+        
     elseif action==3
         %% Run dummy calendar app
         
@@ -279,9 +296,40 @@ while(1)
             
             events = nalk_getCalendarEvents(weekday);
             pause(5);
-
+            
         end
         
+    elseif action==4
+        [randX, ~] = rand(HMMS(1),2*22050*0.02);
+        [randX2, ~] = rand(HMMS(1),2*22050*0.02);
+        word = 'bye';
+
+        figure;
+        
+        subplot(2,2,1);
+        imagesc(randX(1:13,:));
+        axis xy
+        colormap jet;
+        c = colorbar;
+        c.Label.String = 'Coefficient amplitude';
+        title(sprintf('Cepstrogram plot of "%s" by %s', word, 'HMM/rand'));
+        xlabel('time [frame]')
+        ylabel('frequency cepstrum [coefficient #]')
+        
+        subplot(2,2,2);
+        imagesc(randX2(1:13,:));
+        axis xy
+        colormap jet;
+        c = colorbar;
+        c.Label.String = 'Coefficient amplitude';
+        title(sprintf('Cepstrogram plot of "%s" by %s', word, 'HMM/rand 2'));
+        xlabel('time [frame]')
+        ylabel('frequency cepstrum [coefficient #]')
+        
+        for ii=1:2
+            subplot(2,2,ii+2);
+            nalk_heatmap(word,speakerlist(ii+4).name,audiodir,filetype,winsize,nceps);
+        end
         
         
     end
