@@ -107,7 +107,7 @@ while(1)
     
     
     if action==1 
-        %% record a word a recognize it
+        %% record a word and recognize it
         
         % create audiorecorder object
         recObj = audiorecorder(Fs, nBits, nChannels);
